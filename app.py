@@ -4,10 +4,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime
 from pathlib import Path
-import sqlite3, uuid
+import sqlite3, uuid, os
 
 BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "foodrescue.db"
+
+if os.environ.get("VERCEL"):
+    DB_PATH = Path("/tmp/foodrescue.db")
+else:
+    DB_PATH = BASE_DIR / "foodrescue.db"
 
 app = Flask(__name__)
 app.secret_key = "foodrescue-localhost-2026"
