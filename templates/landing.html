@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}FoodRescue — Keep safe surplus moving{% endblock %}
+{% block content %}
+<section class="hero-section">
+  <div class="hero-noise"></div>
+  <div class="hero-copy reveal-up">
+    <div class="live-pill"><span class="pulse-dot"></span> FREE · LIVE · MOBILE-FIRST</div>
+    <h1>Keep safe surplus<br><span class="gradient-text">moving.</span></h1>
+    <p class="hero-lead">Restaurants list what is available. NGOs discover, reserve and navigate to the exact business address — before good food goes to waste.</p>
+    <div class="hero-actions"><a class="hero-btn primary" href="{{url_for('register')}}">Start rescuing food <span>↗</span></a><a class="hero-btn ghost" href="#how-it-works">See how it works <span>↓</span></a></div>
+    <div class="hero-proof"><span>For restaurants</span><i></i><span>For NGOs & organizations</span><i></i><span>Local & simple</span></div>
+  </div>
+  <div class="hero-visual reveal-scale">
+    <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+    <div class="food-window">
+      <div class="window-top"><span>LIVE SURPLUS</span><span class="live-dot-text">● LIVE</span></div>
+      <div class="food-photo photo-one"><div class="photo-label">Fresh meals · Mumbai</div></div>
+      <div class="floating-card card-one"><span class="mini-icon">🍱</span><div><strong>20 meals</strong><small>Ready to rescue</small></div></div>
+      <div class="floating-card card-two"><span class="mini-icon green">✓</span><div><strong>Pickup in 48 min</strong><small>Urgency is visible</small></div></div>
+      <div class="floating-card card-three"><span class="mini-icon orange">↗</span><div><strong>Exact address</strong><small>Directions built in</small></div></div>
+    </div>
+  </div>
+</section>
+<section class="ticker"><div class="ticker-track"><span>SAFE FOOD</span><b>✦</b><span>REAL-TIME LISTINGS</span><b>✦</b><span>LOCAL PICKUP</span><b>✦</b><span>ZERO WASTE</span><b>✦</b><span>SAFE FOOD</span><b>✦</b><span>REAL-TIME LISTINGS</span><b>✦</b><span>LOCAL PICKUP</span><b>✦</b><span>ZERO WASTE</span><b>✦</b></div></section>
+<section id="impact" class="stats-section section-dark">
+  <div class="section-kicker reveal-up">THE MISSION</div><div class="section-title-row reveal-up"><h2>Less waiting.<br><span class="gradient-text">More rescuing.</span></h2><p>FoodRescue turns an end-of-day surplus problem into a simple local connection between the business that has food and the organization that can use it.</p></div>
+  <div class="stats-grid"><div class="impact-stat reveal-up"><strong data-count="01">01</strong><span>Place to list surplus</span></div><div class="impact-stat reveal-up"><strong>LIVE</strong><span>Availability before pickup</span></div><div class="impact-stat reveal-up"><strong>1 TAP</strong><span>To get exact directions</span></div><div class="impact-stat reveal-up"><strong>0</strong><span>Individual accounts needed</span></div></div>
+</section>
+<section id="how-it-works" class="how-section">
+  <div class="section-kicker reveal-up">HOW IT WORKS</div><div class="section-title-row reveal-up"><h2>Simple by design.<br><span class="green-text">Useful in real life.</span></h2><p>No complicated marketplace. Just the right information at the right time.</p></div>
+  <div class="steps-grid">
+    <article class="step-card reveal-up"><span class="step-no">01</span><div class="step-icon">＋</div><h3>Restaurants list</h3><p>Add the surplus food, quantity, pickup deadline and exact business address.</p></article>
+    <article class="step-card reveal-up"><span class="step-no">02</span><div class="step-icon">⌕</div><h3>NGOs discover</h3><p>Browse live available food and see what can still be rescued nearby.</p></article>
+    <article class="step-card reveal-up"><span class="step-no">03</span><div class="step-icon">✓</div><h3>Reserve it</h3><p>Choose the quantity and receive a reservation code instantly.</p></article>
+    <article class="step-card reveal-up"><span class="step-no">04</span><div class="step-icon">↗</div><h3>Navigate & collect</h3><p>Use the exact restaurant address and pickup deadline to get there in time.</p></article>
+  </div>
+</section>
+<section id="for-you" class="roles-section section-dark">
+  <div class="section-kicker reveal-up">BUILT FOR BOTH SIDES</div><div class="roles-grid">
+    <article class="role-card restaurant reveal-scale"><div class="role-top"><span>01</span><span class="role-tag">RESTAURANTS</span></div><h2>Turn today's extra food into <em>tomorrow's impact.</em></h2><p>Publish safe surplus in seconds, manage only your own listings and see who has reserved your food.</p><a href="{{url_for('register')}}">List surplus <span>↗</span></a></article>
+    <article class="role-card ngo reveal-scale"><div class="role-top"><span>02</span><span class="role-tag">NGOS / ORGANIZATIONS</span></div><h2>Good food is waiting to be <em>rescued.</em></h2><p>Discover available surplus, reserve what you need and navigate straight to the business.</p><a href="{{url_for('register')}}">Find surplus <span>↗</span></a></article>
+  </div>
+</section>
+<section class="closing-section"><div class="closing-inner reveal-scale"><div class="live-pill"><span class="pulse-dot"></span> LOCAL · SIMPLE · ACTIONABLE</div><h2>Good food shouldn't<br><span class="gradient-text">stop at closing time.</span></h2><p>FoodRescue keeps safe surplus moving to people and organizations who can use it.</p><a class="hero-btn primary" href="{{url_for('register')}}">Build your FoodRescue account <span>↗</span></a></div></section>
+<footer class="public-footer"><div class="brand"><span class="brand-mark">FR</span><span>Food<span class="accent-word">Rescue</span></span></div><p>Keep safe surplus moving.</p><span>© 2026 FoodRescue</span></footer>
+{% endblock %}

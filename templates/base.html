@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}FoodRescue{% endblock %}</title>
+<meta name="description" content="FoodRescue keeps safe surplus food moving to people and organizations who can use it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body class="site-body">
+<div class="cursor-glow"></div>
+{% if me %}
+<header class="app-nav">
+  <a class="brand" href="{{url_for('home')}}"><span class="brand-mark">FR</span><span>Food<span class="accent-word">Rescue</span></span></a>
+  <nav class="app-links">
+    <a href="{{url_for('home')}}" class="{{'active' if request.endpoint=='home' else ''}}">Home</a>
+    {% if me['role']=='business' %}
+      <a href="{{url_for('add_surplus')}}" class="nav-cta">Add surplus</a>
+      <a href="{{url_for('dashboard')}}" class="{{'active' if request.endpoint=='dashboard' else ''}}">Dashboard</a>
+      <a href="{{url_for('reservations')}}" class="{{'active' if request.endpoint=='reservations' else ''}}">Reservations</a>
+    {% else %}
+      <a href="{{url_for('discover')}}" class="{{'active' if request.endpoint=='discover' else ''}}">Discover</a>
+      <a href="{{url_for('reservations')}}" class="{{'active' if request.endpoint=='reservations' else ''}}">Reservations</a>
+      <a href="{{url_for('dashboard')}}" class="{{'active' if request.endpoint=='dashboard' else ''}}">Dashboard</a>
+    {% endif %}
+    <a href="{{url_for('profile')}}" class="{{'active' if request.endpoint=='profile' else ''}}">Profile</a>
+  </nav>
+  <div class="nav-user">
+    <span class="nav-role">{{'Restaurant' if me['role']=='business' else 'NGO / Org'}}</span>
+    <a class="avatar" href="{{url_for('profile')}}">{{me['name'][0]|upper}}</a>
+    <a class="logout-link" href="{{url_for('logout')}}">Log out</a>
+  </div>
+</header>
+{% else %}
+<header class="public-nav">
+  <a class="brand" href="{{url_for('landing')}}"><span class="brand-mark">FR</span><span>Food<span class="accent-word">Rescue</span></span></a>
+  <nav class="public-links">
+    <a href="{{url_for('landing')}}#how-it-works">How it works</a>
+    <a href="{{url_for('landing')}}#impact">Impact</a>
+    <a href="{{url_for('landing')}}#for-you">For you</a>
+  </nav>
+  <div class="public-actions"><a href="{{url_for('login')}}" class="text-link">Log in</a><a href="{{url_for('register')}}" class="pill-btn">Get started <span>↗</span></a></div>
+</header>
+{% endif %}
+{% with messages=get_flashed_messages(with_categories=true) %}
+{% if messages %}<div class="toast-area">{% for category,message in messages %}<div class="toast {{category}}">{{message}}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+<main>{% block content %}{% endblock %}</main>
+<script>
+const io=new IntersectionObserver((entries)=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('is-visible')}),{threshold:.12});
+document.querySelectorAll('.reveal,.reveal-up,.reveal-scale').forEach(el=>io.observe(el));
+window.addEventListener('mousemove',e=>{document.documentElement.style.setProperty('--mx',e.clientX+'px');document.documentElement.style.setProperty('--my',e.clientY+'px')});
+</script>
+</body>
+</html>
