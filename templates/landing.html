@@ -34,7 +34,48 @@
         <span class="window-live"><span class="pulse-dot"></span> LIVE</span>
       </div>
       <div class="food-photo">
-        <img src="https://images.unsplash.com/photo-1585238341710-4dd0442fdf81?w=500&h=400&fit=crop" alt="Fresh Indian meals" style="width: 100%; height: 100%; object-fit: cover;">
+        <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+          <!-- Background gradient -->
+          <defs>
+            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#3D2817;stop-opacity:1" />
+            </linearGradient>
+            <radialGradient id="plateGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" style="stop-color:#FFE4B5;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#DAA520;stop-opacity:1" />
+            </radialGradient>
+          </defs>
+          <!-- Background -->
+          <rect width="500" height="400" fill="url(#bgGrad)"/>
+          <!-- Plate 1 -->
+          <circle cx="150" cy="140" r="85" fill="url(#plateGrad)" opacity="0.9"/>
+          <circle cx="150" cy="140" r="80" fill="#FFF8DC"/>
+          <!-- Rice and curry on plate 1 -->
+          <circle cx="140" cy="130" r="55" fill="#E8D4A0"/>
+          <circle cx="160" cy="150" r="40" fill="#C85A3A"/>
+          <circle cx="145" cy="160" r="25" fill="#B8860B"/>
+          <!-- Plate 2 -->
+          <circle cx="350" cy="200" r="95" fill="url(#plateGrad)" opacity="0.85"/>
+          <circle cx="350" cy="200" r="90" fill="#FFF8DC"/>
+          <!-- Rice and curry on plate 2 -->
+          <circle cx="335" cy="185" r="65" fill="#E8D4A0"/>
+          <circle cx="365" cy="215" r="50" fill="#D2691E"/>
+          <circle cx="345" cy="200" r="30" fill="#CD853F"/>
+          <circle cx="370" cy="190" r="20" fill="#B8860B"/>
+          <!-- Garnish elements -->
+          <ellipse cx="140" cy="110" rx="8" ry="15" fill="#228B22" opacity="0.7"/>
+          <ellipse cx="175" cy="125" rx="7" ry="12" fill="#228B22" opacity="0.6"/>
+          <ellipse cx="360" cy="160" rx="9" ry="16" fill="#228B22" opacity="0.8"/>
+          <ellipse cx="325" cy="175" rx="8" ry="14" fill="#228B22" opacity="0.7"/>
+          <!-- Spices/texture -->
+          <circle cx="155" cy="145" r="3" fill="#8B4513" opacity="0.5"/>
+          <circle cx="148" cy="152" r="2" fill="#A0522D" opacity="0.6"/>
+          <circle cx="165" cy="155" r="2" fill="#8B4513" opacity="0.5"/>
+          <circle cx="355" cy="205" r="3" fill="#8B4513" opacity="0.5"/>
+          <circle cx="345" cy="220" r="3" fill="#A0522D" opacity="0.6"/>
+          <circle cx="375" cy="210" r="2" fill="#8B4513" opacity="0.5"/>
+        </svg>
         <div class="photo-label">Fresh meals · Mumbai</div>
       </div>
       <div class="floating-card card-one">
