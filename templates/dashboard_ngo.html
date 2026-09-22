@@ -1,1 +1,91 @@
-{% extends "base.html" %}{% block title %}NGO Dashboard — FoodRescue{% endblock %}{% block content %}<div class="app-shell"><section class="app-hero reveal-up"><div><div class="section-kicker">NGO DASHBOARD</div><h1>Your rescue<br><span class="gradient-text">activity.</span></h1><p>Everything your organization has reserved through FoodRescue.</p></div><div class="app-actions"><a class="dark-btn primary" href="{{url_for('discover')}}">Find more food ↗</a></div></section><div class="app-stats"><div class="app-stat"><strong>{{reservations_count}}</strong><span>Active reservations</span></div><div class="app-stat"><strong>{{items}}</strong><span>Items reserved</span></div><div class="app-stat"><strong>↗</strong><span>Directions available</span></div></div><div class="empty-dark"><h3>Need more surplus?</h3><p>Open Discover to see live listings from participating food businesses.</p><a class="dark-btn primary" href="{{url_for('discover')}}">Open Discover</a></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Dashboard — FoodRescue{% endblock %}
+{% block content %}
+<div class="app-shell">
+
+  <section class="app-hero reveal-up">
+    <div>
+      <div class="kicker">YOUR RESCUE ACTIVITY</div>
+      <h1>Your rescue<br><span class="lime-text">overview.</span></h1>
+      <p>Everything {{ me['organization_name'] }} has reserved and rescued through FoodRescue.</p>
+    </div>
+    <div class="app-actions">
+      <a class="btn primary" href="{{ url_for('discover') }}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Find more food
+      </a>
+      <a class="btn ghost" href="{{ url_for('reservations') }}">My reservations</a>
+    </div>
+  </section>
+
+  <!-- stats strip -->
+  <div class="app-stats">
+    <div class="app-stat reveal-up">
+      <strong>{{ reservations_count }}</strong>
+      <span>Active reservations</span>
+    </div>
+    <div class="app-stat reveal-up">
+      <strong>{{ total_reserved_qty }}</strong>
+      <span>Plates reserved</span>
+    </div>
+    <div class="app-stat reveal-up {{ 'good' if total_rescued > 0 }}">
+      <strong>{{ total_rescued }}</strong>
+      <span>Plates rescued</span>
+    </div>
+  </div>
+
+  {% if total_rescued > 0 %}
+  <div class="rescue-streak reveal-up">
+    <div class="streak-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lime)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="streak-text">
+      <h3>{{ total_rescued }} plates rescued</h3>
+      <p>{{ me['organization_name'] }} has made a real difference. Keep going.</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- recent reservations -->
+  {% if recent %}
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>Recent reservations</h2>
+        <p>Your latest rescue activity</p>
+      </div>
+      <a href="{{ url_for('reservations') }}">View all →</a>
+    </div>
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:4px 20px">
+      {% for r in recent %}
+      <a href="{{ url_for('reservation_detail', reservation_id=r['id']) }}" style="text-decoration:none;color:inherit">
+        <div class="recent-res-row">
+          <div class="recent-res-left">
+            <h4>{{ r['food_name'] }}</h4>
+            <p>{{ r['business_name'] }} · {{ r['quantity'] }} plates</p>
+          </div>
+          <div class="recent-res-right">
+            <span class="res-status {{ r['status'] }}" style="display:inline-block;padding:5px 9px;border-radius:999px;font:700 9px 'Space Grotesk';letter-spacing:.1em;
+              {{ 'background:rgba(183,243,74,.1);color:var(--lime)' if r['status']=='Reserved' else 'background:rgba(111,201,138,.12);color:#6FC98A' }}">
+              {{ r['status'] }}
+            </span>
+            <div style="font-size:10px;color:var(--muted2);margin-top:4px">
+              {{ r['pickup_time'][11:16] if r['pickup_time']|length >= 16 else r['pickup_time'] }}
+            </div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% else %}
+  <div class="empty-state reveal-scale">
+    <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 14px;color:var(--muted2)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <h3>No rescue activity yet.</h3>
+    <p>Open Discover to see live listings and make your first reservation.</p>
+    <a class="btn primary" href="{{ url_for('discover') }}">Discover surplus</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

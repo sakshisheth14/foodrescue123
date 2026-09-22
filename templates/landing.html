@@ -1,46 +1,197 @@
 {% extends "base.html" %}
-{% block title %}FoodRescue — Keep safe surplus moving{% endblock %}
+{% block title %}FoodRescue — Good food shouldn't go to waste{% endblock %}
 {% block content %}
+
 <section class="hero-section">
   <div class="hero-noise"></div>
   <div class="hero-copy reveal-up">
-    <div class="live-pill"><span class="pulse-dot"></span> FREE · LIVE · MOBILE-FIRST</div>
-    <h1>Keep safe surplus<br><span class="gradient-text">moving.</span></h1>
-    <p class="hero-lead">Restaurants list what is available. NGOs discover, reserve and navigate to the exact business address — before good food goes to waste.</p>
-    <div class="hero-actions"><a class="hero-btn primary" href="{{url_for('register')}}">Start rescuing food <span>↗</span></a><a class="hero-btn ghost" href="#how-it-works">See how it works <span>↓</span></a></div>
-    <div class="hero-proof"><span>For restaurants</span><i></i><span>For NGOs & organizations</span><i></i><span>Local & simple</span></div>
+    <div class="live-pill"><span class="pulse-dot"></span> LIVE · REAL-TIME · LOCAL</div>
+    <h1>Good food<br>shouldn't<br><span class="gradient-text">go to waste.</span></h1>
+    <p class="hero-lead">FoodRescue connects restaurants and food businesses with organisations that can put safe surplus food to use — before it becomes waste.</p>
+    <div class="hero-actions">
+      <a class="hero-btn primary" href="{{ url_for('register') }}">
+        Find surplus food
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+      <a class="hero-btn ghost" href="#how-it-works">
+        How it works
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+    </div>
+    <div class="hero-proof">
+      <span>For restaurants</span><i></i>
+      <span>For NGOs &amp; organisations</span><i></i>
+      <span>OTP pickup verified</span>
+    </div>
   </div>
+
   <div class="hero-visual reveal-scale">
-    <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+    <div class="orbit orbit-a"></div>
+    <div class="orbit orbit-b"></div>
     <div class="food-window">
-      <div class="window-top"><span>LIVE SURPLUS</span><span class="live-dot-text">● LIVE</span></div>
-      <div class="food-photo photo-one"><div class="photo-label">Fresh meals · Mumbai</div></div>
-      <div class="floating-card card-one"><span class="mini-icon">🍱</span><div><strong>20 meals</strong><small>Ready to rescue</small></div></div>
-      <div class="floating-card card-two"><span class="mini-icon green">✓</span><div><strong>Pickup in 48 min</strong><small>Urgency is visible</small></div></div>
-      <div class="floating-card card-three"><span class="mini-icon orange">↗</span><div><strong>Exact address</strong><small>Directions built in</small></div></div>
+      <div class="window-top">
+        <span>LIVE SURPLUS</span>
+        <span class="window-live"><span class="pulse-dot"></span> LIVE</span>
+      </div>
+      <div class="food-photo">
+        <div class="photo-label">Fresh meals · Mumbai</div>
+      </div>
+      <div class="floating-card card-one">
+        <span class="mini-icon green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </span>
+        <div><strong>20 plates</strong><small>Ready to rescue</small></div>
+      </div>
+      <div class="floating-card card-two">
+        <span class="mini-icon orange">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </span>
+        <div><strong>Pickup in 48 min</strong><small>Deadline visible</small></div>
+      </div>
+      <div class="floating-card card-three">
+        <span class="mini-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </span>
+        <div><strong>Local pickup</strong><small>Exact address</small></div>
+      </div>
     </div>
   </div>
 </section>
-<section class="ticker"><div class="ticker-track"><span>SAFE FOOD</span><b>✦</b><span>REAL-TIME LISTINGS</span><b>✦</b><span>LOCAL PICKUP</span><b>✦</b><span>ZERO WASTE</span><b>✦</b><span>SAFE FOOD</span><b>✦</b><span>REAL-TIME LISTINGS</span><b>✦</b><span>LOCAL PICKUP</span><b>✦</b><span>ZERO WASTE</span><b>✦</b></div></section>
-<section id="impact" class="stats-section section-dark">
-  <div class="section-kicker reveal-up">THE MISSION</div><div class="section-title-row reveal-up"><h2>Less waiting.<br><span class="gradient-text">More rescuing.</span></h2><p>FoodRescue turns an end-of-day surplus problem into a simple local connection between the business that has food and the organization that can use it.</p></div>
-  <div class="stats-grid"><div class="impact-stat reveal-up"><strong data-count="01">01</strong><span>Place to list surplus</span></div><div class="impact-stat reveal-up"><strong>LIVE</strong><span>Availability before pickup</span></div><div class="impact-stat reveal-up"><strong>1 TAP</strong><span>To get exact directions</span></div><div class="impact-stat reveal-up"><strong>0</strong><span>Individual accounts needed</span></div></div>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span>SURPLUS FOOD</span><b>✦</b><span>REAL-TIME LISTINGS</span><b>✦</b>
+    <span>LOCAL PICKUP</span><b>✦</b><span>ZERO WASTE</span><b>✦</b>
+    <span>OTP VERIFIED</span><b>✦</b><span>FOOD RESCUED</span><b>✦</b>
+    <span>SURPLUS FOOD</span><b>✦</b><span>REAL-TIME LISTINGS</span><b>✦</b>
+    <span>LOCAL PICKUP</span><b>✦</b><span>ZERO WASTE</span><b>✦</b>
+    <span>OTP VERIFIED</span><b>✦</b><span>FOOD RESCUED</span><b>✦</b>
+  </div>
+</div>
+
+<section id="impact" class="stats-section">
+  <div class="kicker reveal-up">THE IMPACT</div>
+  <div class="section-title-row reveal-up">
+    <h2>Less waste.<br><span class="lime-text">More rescuing.</span></h2>
+    <p>Every listing is a rescue waiting to happen. FoodRescue turns an end-of-day surplus problem into a simple local connection.</p>
+  </div>
+  <div class="stats-grid">
+    <div class="impact-stat reveal-up">
+      <strong data-count="{{ total_rescued }}">{{ total_rescued }}</strong>
+      <span>Plates rescued</span>
+    </div>
+    <div class="impact-stat reveal-up">
+      <strong data-count="{{ partner_ngos }}">{{ partner_ngos }}</strong>
+      <span>Partner NGOs</span>
+    </div>
+    <div class="impact-stat reveal-up">
+      <strong data-count="{{ partner_biz }}">{{ partner_biz }}</strong>
+      <span>Food businesses</span>
+    </div>
+    <div class="impact-stat reveal-up">
+      <strong data-count="{{ active_listings }}">{{ active_listings }}</strong>
+      <span>Active listings now</span>
+    </div>
+  </div>
 </section>
+
 <section id="how-it-works" class="how-section">
-  <div class="section-kicker reveal-up">HOW IT WORKS</div><div class="section-title-row reveal-up"><h2>Simple by design.<br><span class="green-text">Useful in real life.</span></h2><p>No complicated marketplace. Just the right information at the right time.</p></div>
+  <div class="kicker reveal-up">HOW IT WORKS</div>
+  <div class="section-title-row reveal-up">
+    <h2>Simple by design.<br><span style="color:#315C45">Useful in real life.</span></h2>
+    <p>No complicated marketplace. Just the right food, in the right hands, at the right time.</p>
+  </div>
   <div class="steps-grid">
-    <article class="step-card reveal-up"><span class="step-no">01</span><div class="step-icon">＋</div><h3>Restaurants list</h3><p>Add the surplus food, quantity, pickup deadline and exact business address.</p></article>
-    <article class="step-card reveal-up"><span class="step-no">02</span><div class="step-icon">⌕</div><h3>NGOs discover</h3><p>Browse live available food and see what can still be rescued nearby.</p></article>
-    <article class="step-card reveal-up"><span class="step-no">03</span><div class="step-icon">✓</div><h3>Reserve it</h3><p>Choose the quantity and receive a reservation code instantly.</p></article>
-    <article class="step-card reveal-up"><span class="step-no">04</span><div class="step-icon">↗</div><h3>Navigate & collect</h3><p>Use the exact restaurant address and pickup deadline to get there in time.</p></article>
+    <article class="step-card reveal-up">
+      <span class="step-no">01</span>
+      <div class="step-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <h3>Businesses list</h3>
+      <p>Restaurants publish safe surplus — food name, quantity, pickup time, address, and pricing: free or low-cost total.</p>
+    </article>
+    <article class="step-card reveal-up">
+      <span class="step-no">02</span>
+      <div class="step-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <h3>NGOs discover</h3>
+      <p>Browse live surplus. See quantity, exact address, pickup deadline and total price — before reserving anything.</p>
+    </article>
+    <article class="step-card reveal-up">
+      <span class="step-no">03</span>
+      <div class="step-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <h3>Reserve quantity</h3>
+      <p>Choose exactly how many plates your organisation needs. A unique pickup code is generated instantly.</p>
+    </article>
+    <article class="step-card reveal-up">
+      <span class="step-no">04</span>
+      <div class="step-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <h3>Pickup assigned</h3>
+      <p>The restaurant assigns a pickup person. Status updates track the journey from assigned → on the way → arrived.</p>
+    </article>
+    <article class="step-card reveal-up">
+      <span class="step-no">05</span>
+      <div class="step-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3>OTP → rescued</h3>
+      <p>The NGO shows their pickup code. Restaurant verifies it. Food rescued — impact recorded immediately.</p>
+    </article>
   </div>
 </section>
-<section id="for-you" class="roles-section section-dark">
-  <div class="section-kicker reveal-up">BUILT FOR BOTH SIDES</div><div class="roles-grid">
-    <article class="role-card restaurant reveal-scale"><div class="role-top"><span>01</span><span class="role-tag">RESTAURANTS</span></div><h2>Turn today's extra food into <em>tomorrow's impact.</em></h2><p>Publish safe surplus in seconds, manage only your own listings and see who has reserved your food.</p><a href="{{url_for('register')}}">List surplus <span>↗</span></a></article>
-    <article class="role-card ngo reveal-scale"><div class="role-top"><span>02</span><span class="role-tag">NGOS / ORGANIZATIONS</span></div><h2>Good food is waiting to be <em>rescued.</em></h2><p>Discover available surplus, reserve what you need and navigate straight to the business.</p><a href="{{url_for('register')}}">Find surplus <span>↗</span></a></article>
+
+<section id="for-you" class="roles-section">
+  <div class="kicker reveal-up">BUILT FOR BOTH SIDES</div>
+  <div class="roles-grid">
+    <article class="role-card restaurant reveal-scale">
+      <div class="role-top"><span>01</span><span class="role-tag">RESTAURANTS &amp; FOOD BUSINESSES</span></div>
+      <h2>Turn today's extra food into <em>tomorrow's impact.</em></h2>
+      <p>Publish safe surplus in under a minute. Free donation or low-cost. Manage only your own listings. See who reserved your food, track pickup status and verify with an OTP when food leaves your kitchen.</p>
+      <a href="{{ url_for('register') }}">
+        List your surplus
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </article>
+    <article class="role-card ngo reveal-scale">
+      <div class="role-top"><span>02</span><span class="role-tag">NGOS &amp; ORGANISATIONS</span></div>
+      <h2>Good food is waiting to be <em>rescued.</em></h2>
+      <p>Discover live surplus from restaurants, bakeries and cafés. Choose the exact quantity your organisation needs. Get a reservation code. Track your pickup. Use the OTP to confirm collection.</p>
+      <a href="{{ url_for('register') }}">
+        Find surplus food
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </article>
   </div>
 </section>
-<section class="closing-section"><div class="closing-inner reveal-scale"><div class="live-pill"><span class="pulse-dot"></span> LOCAL · SIMPLE · ACTIONABLE</div><h2>Good food shouldn't<br><span class="gradient-text">stop at closing time.</span></h2><p>FoodRescue keeps safe surplus moving to people and organizations who can use it.</p><a class="hero-btn primary" href="{{url_for('register')}}">Build your FoodRescue account <span>↗</span></a></div></section>
-<footer class="public-footer"><div class="brand"><span class="brand-mark">FR</span><span>Food<span class="accent-word">Rescue</span></span></div><p>Keep safe surplus moving.</p><span>© 2026 FoodRescue</span></footer>
+
+<section class="closing-section">
+  <div class="closing-inner reveal-scale">
+    <div class="live-pill"><span class="pulse-dot"></span> LOCAL · SIMPLE · ACTIONABLE</div>
+    <h2>Good food shouldn't<br><span class="gradient-text">stop at closing time.</span></h2>
+    <p>FoodRescue keeps safe surplus moving to people and organisations who can use it. Every listing is a rescue waiting to happen.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a class="hero-btn primary" href="{{ url_for('register') }}">
+        Create your account
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+      <a class="hero-btn ghost" href="{{ url_for('login') }}">Log in</a>
+    </div>
+  </div>
+</section>
+
+<footer class="public-footer">
+  <a class="brand" href="{{ url_for('landing') }}"><span class="brand-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="2" x2="7" y2="8"/><line x1="5" y1="2" x2="5" y2="6"/><line x1="9" y1="2" x2="9" y2="6"/><path d="M5 6 Q7 9 7 10 L7 22"/><path d="M17 2 C14 2 13 5 14 8 L15.5 12 L15.5 22"/><ellipse cx="16" cy="4.5" rx="2" ry="2.5"/></svg></span><span>Food<span class="accent-word">Rescue</span></span></a>
+  <div class="footer-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#impact">Impact</a>
+    <a href="{{ url_for('login') }}">Log in</a>
+    <a href="{{ url_for('register') }}">Sign up</a>
+  </div>
+  <span>© 2026 FoodRescue</span>
+</footer>
 {% endblock %}

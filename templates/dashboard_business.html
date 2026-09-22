@@ -1,1 +1,88 @@
-{% extends "base.html" %}{% block title %}Business Dashboard — FoodRescue{% endblock %}{% block content %}<div class="app-shell"><section class="app-hero reveal-up"><div><div class="section-kicker">BUSINESS DASHBOARD</div><h1>Your surplus,<br><span class="gradient-text">at a glance.</span></h1><p>Manage only the food published by {{me['organization_name']}}.</p></div><div class="app-actions"><a class="dark-btn primary" href="{{url_for('add_surplus')}}">＋ Add surplus</a></div></section><div class="app-stats"><div class="app-stat"><strong>{{listings|length}}</strong><span>Active listings</span></div><div class="app-stat"><strong>{{listings|sum(attribute='available')}}</strong><span>Available items</span></div><div class="app-stat"><strong>{{total_reserved}}</strong><span>Reserved items</span></div></div><div class="food-grid-dark">{% for x in listings %}<article class="food-card-dark reveal-up"><span class="tag-dark">{{x['category']}}</span><h3>{{x['food_name']}}</h3><div class="food-meta-dark"><span>⌖ {{x['address']}}</span><span>◷ {{x['pickup_time'][11:16]}}</span></div><div class="deadline-dark {{x['deadline_class']}}">{{x['deadline_text']}}</div><div class="card-footer"><span>{{x['available']}} available</span><form method="post" action="{{url_for('remove_listing',listing_id=x['id'])}}"><button class="card-link" style="background:none;border:0" type="submit">Remove</button></form></div></article>{% endfor %}</div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Dashboard — FoodRescue{% endblock %}
+{% block content %}
+<div class="app-shell">
+
+  <section class="app-hero reveal-up">
+    <div>
+      <div class="kicker">RESTAURANT CONSOLE</div>
+      <h1>Your surplus,<br><span class="lime-text">at a glance.</span></h1>
+      <p>All active listings published by <strong>{{ me['organization_name'] }}</strong>.</p>
+    </div>
+    <div class="app-actions">
+      <a class="btn primary" href="{{ url_for('add_surplus') }}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add surplus
+      </a>
+    </div>
+  </section>
+
+  <!-- stats -->
+  <div class="app-stats">
+    <div class="app-stat reveal-up">
+      <strong>{{ listings|length }}</strong>
+      <span>Active listings</span>
+    </div>
+    <div class="app-stat reveal-up">
+      <strong>{{ total_reserved }}</strong>
+      <span>Plates reserved</span>
+    </div>
+    <div class="app-stat reveal-up {{ 'good' if total_rescued > 0 }}">
+      <strong>{{ total_rescued }}</strong>
+      <span>Plates rescued</span>
+    </div>
+  </div>
+
+  {% if listings %}
+  <div class="food-grid">
+    {% for x in listings %}
+    <article class="food-card reveal-up">
+      <div class="card-top">
+        <span class="tag">{{ x['category'] }}</span>
+        {% if x['paused'] %}
+        <span class="tag orange">Paused</span>
+        {% else %}
+        <span class="avail-badge">{{ x['available'] }} available</span>
+        {% endif %}
+      </div>
+      <h3>{{ x['food_name'] }}</h3>
+      <div class="food-meta">
+        <span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          {{ x['address'] }}
+        </span>
+        <span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Pickup by {{ x['pickup_time_display'] }}
+        </span>
+      </div>
+      <div class="deadline-badge {{ x['deadline_class'] }}">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        {{ x['deadline_text'] }}
+      </div>
+      <div class="card-foot">
+        <span>{{ x['available'] }} available · {{ x['reserved'] }} reserved</span>
+        <span class="price-tag {{ 'free' if x['is_free'] }}" style="font-size:13px">{{ x['price_short'] }}</span>
+      </div>
+      <div style="display:flex;gap:7px;margin-top:12px;flex-wrap:wrap">
+        <a class="btn sm ghost" href="{{ url_for('edit_listing', listing_id=x['id']) }}">Edit</a>
+        <form method="post" action="{{ url_for('toggle_listing', listing_id=x['id']) }}" style="display:inline">
+          <button class="btn sm ghost" type="submit">{{ 'Resume' if x['paused'] else 'Pause' }}</button>
+        </form>
+        <form method="post" action="{{ url_for('remove_listing', listing_id=x['id']) }}" onsubmit="return confirm('Remove this listing?')" style="display:inline;margin-left:auto">
+          <button class="btn sm danger" type="submit">Remove</button>
+        </form>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state reveal-scale">
+    <h3>No active listings.</h3>
+    <p>Publish your first surplus listing to get started.</p>
+    <a class="btn primary" href="{{ url_for('add_surplus') }}">Add surplus</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,1 +1,123 @@
-{% extends "base.html" %}{% block title %}My Reservations — FoodRescue{% endblock %}{% block content %}<div class="app-shell"><section class="app-hero reveal-up"><div><div class="section-kicker">YOUR RESERVATIONS</div><h1>Food you've<br><span class="gradient-text">rescued.</span></h1><p>Keep your reservation code handy and use exact directions for pickup.</p></div><div class="app-actions"><a class="dark-btn primary" href="{{url_for('discover')}}">Find more food ↗</a></div></section>{% if reservations %}<div class="reservations-grid-dark">{% for r in reservations %}<article class="reservation-dark reveal-up"><div class="top"><span class="status-dark">{{r['status']}}</span><strong style="font-size:11px;color:#777f79">{{r['code']}}</strong></div><h3>{{r['food_name']}}</h3><p>{{r['business_name']}}</p><div class="res-grid"><div class="res-item"><span>Quantity</span><strong>{{r['quantity']}}</strong></div><div class="res-item"><span>Pickup</span><strong>{{r['pickup_time']|replace('T',' ')}}</strong></div><div class="res-item"><span>Phone</span><strong>{{r['business_phone']}}</strong></div><div class="res-item"><span>Email</span><strong>{{r['business_email']}}</strong></div></div><p style="margin-top:18px">⌖ {{r['address']}}</p><a class="dark-btn primary" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination={{r['address']|urlencode}}">Navigate to exact address ↗</a></article>{% endfor %}</div>{% else %}<div class="empty-dark"><h3>No reservations yet.</h3><p>Discover live surplus and reserve food for your organization.</p><a class="dark-btn primary" href="{{url_for('discover')}}">Discover surplus</a></div>{% endif %}</div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}My Reservations — FoodRescue{% endblock %}
+{% block content %}
+<div class="app-shell">
+
+  <section class="app-hero reveal-up">
+    <div class="app-hero-text">
+      <div class="kicker">YOUR RESERVATIONS</div>
+      <h1>Food you've<br><span class="lime-text">reserved.</span></h1>
+      <p>Keep your pickup code ready. Use directions to navigate to the exact address before the deadline.</p>
+    </div>
+    <div class="app-actions">
+      <a class="btn primary" href="{{ url_for('discover') }}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Find more food
+      </a>
+    </div>
+  </section>
+
+  {% if reservations %}
+  <div class="res-grid">
+    {% for r in reservations %}
+    <article class="res-card reveal-up">
+      <div class="res-top">
+        <span class="res-code">{{ r['code'] }}</span>
+        <span class="res-status {{ r['status'] }}">{{ r['status'] }}</span>
+      </div>
+
+      <h3>{{ r['food_name'] }}</h3>
+      <p class="biz">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lime)"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        {{ r['business_name'] }}
+      </p>
+
+      <div class="otp-badge">
+        <div>
+          <div class="otp-label">Pickup Code — show this at collection</div>
+          <div class="otp-code">{{ r['code'] }}</div>
+        </div>
+        <button class="otp-copy" data-code="{{ r['code'] }}">Copy</button>
+      </div>
+
+      <div class="res-detail-grid">
+        <div class="res-detail">
+          <span>Quantity</span>
+          <strong>{{ r['quantity'] }} plates</strong>
+        </div>
+        <div class="res-detail">
+          <span>Total</span>
+          <strong>{{ r['price_display'] }}</strong>
+        </div>
+        <div class="res-detail">
+          <span>Pickup</span>
+          <strong>{{ r['pickup_time_display'] }}</strong>
+        </div>
+        <div class="res-detail">
+          <span>Restaurant</span>
+          <strong style="font-size:11px">{{ r['business_phone'] }}</strong>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:flex-start;gap:6px;margin-top:12px;font-size:12px;color:var(--muted)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lime);flex-shrink:0;margin-top:1px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        {{ r['address'] }}
+      </div>
+
+      <!-- pickup tracker -->
+      {% set step = r['pickup_step'] %}
+      <div class="pickup-tracker">
+        <div class="tracker-steps">
+          {% for s in pickup_statuses %}
+          {% set si = loop.index0 %}
+          <div class="tracker-step {{ 'done' if si < step else ('active' if si == step else '') }}">
+            <div class="tracker-dot">
+              {% if si < step %}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              {% else %}
+              {{ si + 1 }}
+              {% endif %}
+            </div>
+            <div class="tracker-label">{{ s }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% if r.get('pickup_status') == 'On the way' and r.get('eta_minutes') %}
+      <div class="pickup-card-mini">
+        <div>
+          <div class="eta-label">ETA</div>
+          <div class="eta">{{ r['eta_minutes'] }} min</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">Pickup is on the way</div>
+      </div>
+      {% elif r.get('pickup_status') == 'Arrived' %}
+      <div style="display:flex;align-items:center;gap:7px;margin-top:10px;padding:10px 12px;background:var(--lime-bg);border:1px solid var(--lime-border);border-radius:9px;font-size:12px;font-weight:700;color:var(--lime)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Pickup has arrived — show your code
+      </div>
+      {% endif %}
+
+      <div style="display:flex;gap:7px;margin-top:14px;flex-wrap:wrap">
+        <a class="btn primary sm" href="{{ url_for('reservation_detail', reservation_id=r['id']) }}">View details</a>
+        <a class="btn sm ghost" href="https://www.google.com/maps/search/?api=1&query={{ r['address']|urlencode }}" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Directions
+        </a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty-state reveal-scale">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <h3>No reservations yet.</h3>
+    <p>Discover live surplus and reserve food for your organisation.</p>
+    <a class="btn primary" href="{{ url_for('discover') }}">Discover surplus</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

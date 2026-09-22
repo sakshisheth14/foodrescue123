@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}{{ reservation['code'] }} — FoodRescue{% endblock %}
+{% block content %}
+<div class="res-detail-page">
+
+  <a class="btn ghost sm" href="{{ url_for('reservations') }}" style="margin-bottom:20px;display:inline-flex">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Back to reservations
+  </a>
+
+  <div class="res-confirm-header reveal-up">
+    <div class="confirm-check">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lime)"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="kicker" style="justify-content:center;margin-bottom:8px">RESERVATION CONFIRMED</div>
+    <h2>{{ reservation['food_name'] }}</h2>
+    <p>{{ reservation['business_name'] }} · {{ reservation['quantity'] }} plates reserved</p>
+  </div>
+
+  <div class="res-body reveal-up">
+
+    <div class="res-section">
+      <div class="res-section-label">Your pickup code</div>
+      <div class="otp-badge">
+        <div>
+          <div class="otp-label">Show this to the pickup person or restaurant</div>
+          <div class="otp-code">{{ reservation['code'] }}</div>
+        </div>
+        <button class="otp-copy" data-code="{{ reservation['code'] }}">Copy</button>
+      </div>
+    </div>
+
+    <div class="res-section">
+      <div class="res-section-label">Reservation details</div>
+      <div class="res-info-row"><span>ID</span><strong>{{ reservation['code'] }}</strong></div>
+      <div class="res-info-row"><span>Food</span><strong>{{ reservation['food_name'] }}</strong></div>
+      <div class="res-info-row"><span>Restaurant</span><strong>{{ reservation['business_name'] }}</strong></div>
+      <div class="res-info-row"><span>Quantity</span><strong>{{ reservation['quantity'] }} plates</strong></div>
+      <div class="res-info-row"><span>Total price</span><strong>{{ reservation['price_display'] }}</strong></div>
+      <div class="res-info-row"><span>Pickup by</span><strong>{{ reservation['pickup_time_display'] }}</strong></div>
+      <div class="res-info-row">
+        <span>Status</span>
+        <strong>
+          <span class="res-status {{ reservation['status'] }}">{{ reservation['status'] }}</span>
+        </strong>
+      </div>
+    </div>
+
+    <div class="res-section">
+      <div class="res-section-label">Pickup address</div>
+      <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:14px">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lime);flex-shrink:0;margin-top:2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span style="font-size:13px;color:var(--muted)">{{ reservation['address'] }}</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn primary sm" href="https://www.google.com/maps/search/?api=1&query={{ reservation['address']|urlencode }}" target="_blank" rel="noopener">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Get directions
+        </a>
+        <a class="btn sm ghost" href="https://www.google.com/maps/dir/?api=1&destination={{ reservation['address']|urlencode }}" target="_blank" rel="noopener">Navigate there</a>
+      </div>
+    </div>
+
+    <div class="res-section">
+      <div class="res-section-label">Restaurant contact</div>
+      <div class="res-info-row">
+        <span>Phone</span>
+        <strong><a href="tel:{{ reservation['business_phone'] }}" style="color:var(--lime)">{{ reservation['business_phone'] }}</a></strong>
+      </div>
+      <div class="res-info-row">
+        <span>Email</span>
+        <strong style="font-size:12px">{{ reservation['business_email'] }}</strong>
+      </div>
+    </div>
+
+    <div class="res-section">
+      <div class="res-section-label">Pickup status</div>
+      {% set step = pickup_step %}
+      {% set ps = pickup['status'] if pickup else 'Waiting' %}
+
+      {% if pickup and ps == 'On the way' and pickup['eta_minutes'] %}
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px 13px;background:rgba(240,107,48,.08);border:1px solid rgba(240,107,48,.2);border-radius:9px;font-size:13px;font-weight:700;color:var(--orange)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        On the way · ETA {{ pickup['eta_minutes'] }} min
+      </div>
+      {% elif pickup and ps == 'Arrived' %}
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px 13px;background:var(--lime-bg);border:1px solid var(--lime-border);border-radius:9px;font-size:13px;font-weight:700;color:var(--lime)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Pickup has arrived — show your code
+      </div>
+      {% endif %}
+
+      <div class="pickup-tracker">
+        <div class="tracker-steps">
+          {% for s in pickup_statuses %}
+          {% set si = loop.index0 %}
+          <div class="tracker-step {{ 'done' if si < step else ('active' if si == step else '') }}">
+            <div class="tracker-dot">
+              {% if si < step %}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              {% else %}{{ si + 1 }}{% endif %}
+            </div>
+            <div class="tracker-label">{{ s }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% if pickup and pickup.get('pickup_name') and ps != 'Waiting' %}
+      <div style="display:flex;align-items:center;gap:7px;margin-top:12px;font-size:12px;color:var(--muted)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Pickup: {{ pickup['pickup_name'] }}{% if pickup.get('pickup_phone') %} · {{ pickup['pickup_phone'] }}{% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:14px">
+      <a class="btn ghost" href="{{ url_for('reservations') }}">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All reservations
+      </a>
+      <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query={{ reservation['address']|urlencode }}" target="_blank" rel="noopener">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Get directions
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

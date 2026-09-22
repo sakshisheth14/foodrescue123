@@ -1,1 +1,86 @@
-{% extends "base.html" %}{% block title %}Create account — FoodRescue{% endblock %}{% block content %}<div class="form-page"><div class="form-card-dark reveal-up"><div class="section-kicker">JOIN FOODRESCUE</div><h1>Choose your side<br><span class="gradient-text">of the rescue.</span></h1><p>Create a restaurant or NGO / organization account. Individual accounts are not part of this project.</p>{% if error %}<div class="form-error-dark">{{error}}</div>{% endif %}<form method="post"><div class="form-grid-dark"><label>Name<input name="name" required value="{{request.form.get('name','')}}"></label><label>Email<input type="email" name="email" required value="{{request.form.get('email','')}}"></label><label>Phone<input name="phone" required value="{{request.form.get('phone','')}}"></label><label>Organization / Restaurant name<input name="organization_name" required value="{{request.form.get('organization_name','')}}"></label><label class="full-dark">Exact address<input name="address" required value="{{request.form.get('address','')}}" placeholder="Full pickup address"></label><div class="full-dark"><label style="margin-bottom:7px">Account type</label><div class="role-grid-dark"><label class="role-option-dark"><input type="radio" name="role" value="business" {% if request.form.get('role','business')=='business' %}checked{% endif %}><strong>Restaurant / Food Business</strong><small>List and manage your own surplus.</small></label><label class="role-option-dark"><input type="radio" name="role" value="ngo" {% if request.form.get('role')=='ngo' %}checked{% endif %}><strong>NGO / Organization</strong><small>Discover and reserve available food.</small></label></div></div><label>Password<input type="password" name="password" required></label><label>Confirm password<input type="password" name="confirm_password" required></label></div><div style="display:flex;justify-content:flex-end;gap:10px"><a class="dark-btn" href="{{url_for('landing')}}">Back</a><button class="dark-btn primary" type="submit">Create account ↗</button></div></form></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Create account — FoodRescue{% endblock %}
+{% block content %}
+<div class="form-page">
+  <div class="form-card reveal-up">
+    <div class="kicker">JOIN FOODRESCUE</div>
+    <h1>Choose your side<br><span class="lime-text">of the rescue.</span></h1>
+    <p>Create a restaurant or NGO account. No individual consumer accounts — this platform is for food businesses and organisations.</p>
+
+    {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
+
+    <form method="post">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label" for="name">Your name</label>
+          <input class="form-input" id="name" name="name" required placeholder="Full name"
+            value="{{ request.form.get('name','') }}">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" id="email" type="email" name="email" required placeholder="you@example.com"
+            value="{{ request.form.get('email','') }}">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="phone">Phone</label>
+          <input class="form-input" id="phone" name="phone" required placeholder="10-digit mobile number"
+            value="{{ request.form.get('phone','') }}">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="org">Organisation / Restaurant name</label>
+          <input class="form-input" id="org" name="organization_name" required placeholder="Your organisation name"
+            value="{{ request.form.get('organization_name','') }}">
+        </div>
+        <div class="form-field full">
+          <label class="form-label" for="address">Exact address</label>
+          <input class="form-input" id="address" name="address" required placeholder="Full address (used for listing pickup location)"
+            value="{{ request.form.get('address','') }}">
+        </div>
+
+        <div class="form-field full">
+          <label class="form-label">Account type</label>
+          <div class="role-grid">
+            <label class="role-option">
+              <input type="radio" name="role" value="business" {{ 'checked' if request.form.get('role','business')=='business' }}>
+              <strong>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:middle"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Restaurant / Food Business
+              </strong>
+              <small>List and manage your own surplus food.</small>
+            </label>
+            <label class="role-option">
+              <input type="radio" name="role" value="ngo" {{ 'checked' if request.form.get('role')=='ngo' }}>
+              <strong>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:middle"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                NGO / Organisation
+              </strong>
+              <small>Discover and reserve available surplus food.</small>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" id="password" type="password" name="password" required placeholder="Min. 6 characters">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="confirm">Confirm password</label>
+          <input class="form-input" id="confirm" type="password" name="confirm_password" required placeholder="Repeat password">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a class="btn ghost" href="{{ url_for('landing') }}">Back</a>
+        <button class="btn primary" type="submit">
+          Create account
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </button>
+      </div>
+    </form>
+
+    <div style="margin-top:16px;font-size:12px;color:var(--muted2);text-align:center">
+      Already have an account? <a href="{{ url_for('login') }}" style="color:var(--lime);font-weight:700">Log in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

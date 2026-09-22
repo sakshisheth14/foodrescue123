@@ -1,1 +1,92 @@
-{% extends "base.html" %}{% block title %}Log in — FoodRescue{% endblock %}{% block content %}<div class="auth-layout"><section class="auth-art"><div><div class="live-pill"><span class="pulse-dot"></span> FOODRESCUE</div><h1>Good food<br><span class="gradient-text">moves.</span></h1><p>Log in to publish safe surplus as a restaurant or discover and reserve food as an NGO / organization.</p></div><div class="auth-mini"><span>Live listings</span><span>Exact addresses</span><span>Simple pickup</span></div></section><section class="auth-form-wrap"><div class="auth-card-dark"><h2>Welcome back.</h2><p>Use your FoodRescue account to continue.</p>{% if error %}<div class="form-error-dark">{{error}}</div>{% endif %}{% if request.args.get('registered') %}<div class="form-success-dark">Account created. You can log in now.</div>{% endif %}<form method="post"><label>Email<input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label><label>Password<input type="password" name="password" required autocomplete="current-password" placeholder="••••••••"></label><button class="dark-btn primary full-btn" type="submit">Log in ↗</button></form><div class="auth-links"><a href="{{url_for('forgot_password')}}">Forgot password?</a><span>New here? <a href="{{url_for('register')}}">Create account</a></span></div></div></section></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Log in — FoodRescue{% endblock %}
+{% block content %}
+<div class="auth-layout">
+  <section class="auth-art">
+    <div>
+      <div class="live-pill" style="margin-bottom:20px"><span class="pulse-dot"></span> FOODRESCUE</div>
+      <h1>Good food<br><span class="gradient-text">moves.</span></h1>
+      <p style="margin-top:16px">Restaurants list safe surplus. NGOs discover, reserve and collect. One platform — two roles — one login.</p>
+    </div>
+    <div>
+      <div style="display:grid;gap:10px;margin-bottom:20px">
+        <div style="background:rgba(142,219,60,.05);border:1px solid var(--lime-border);border-radius:12px;padding:14px">
+          <div style="font:700 10px 'Space Grotesk';color:var(--lime);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Restaurant / Food Business
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin:0">List surplus, manage listings, assign pickups, verify OTPs.</p>
+        </div>
+        <div style="background:rgba(240,107,48,.05);border:1px solid rgba(240,107,48,.2);border-radius:12px;padding:14px">
+          <div style="font:700 10px 'Space Grotesk';color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            NGO / Organisation
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin:0">Discover live surplus, reserve food, track pickup, verify with OTP.</p>
+        </div>
+      </div>
+      <div class="auth-chips">
+        <span>Live listings</span>
+        <span>OTP pickup</span>
+        <span>Pickup tracking</span>
+        <span>Exact directions</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="auth-form-wrap">
+    <div class="auth-card">
+      <h2>Log in.</h2>
+      <p>Restaurant or NGO — same form, one place.</p>
+
+      {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
+      {% if request.args.get('registered') %}<div class="form-success">Account created — you can log in now.</div>{% endif %}
+
+      <form method="post" id="login-form">
+        <label>
+          Email
+          <input type="email" id="login-email" name="email" required autocomplete="email" placeholder="you@example.com">
+        </label>
+        <label>
+          Password
+          <input type="password" id="login-password" name="password" required autocomplete="current-password" placeholder="••••••••">
+        </label>
+        <button class="btn primary full" type="submit" style="margin-top:6px;height:44px;font-size:14px">
+          Log in
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </button>
+      </form>
+
+      <div class="auth-links">
+        <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+        <span>New? <a href="{{ url_for('register') }}">Create account</a></span>
+      </div>
+
+      <div style="margin-top:22px">
+        <div style="font:600 10px 'Space Grotesk';color:var(--muted2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;text-align:center">
+          Try a demo account — click to fill
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button type="button" class="demo-fill-btn" data-email="greenleftkitchen@demo.fr" data-pw="demo1234">
+            <span style="display:block;font:700 10px 'Space Grotesk';color:var(--lime);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">
+              Restaurant
+            </span>
+            <span style="display:block;font-size:12px;color:var(--white);font-weight:600">Green Leaf Kitchen</span>
+            <span style="display:block;font-size:11px;color:var(--muted2);margin-top:2px">greenleftkitchen@demo.fr</span>
+          </button>
+          <button type="button" class="demo-fill-btn" data-email="mumbai.relief@demo.fr" data-pw="demo1234">
+            <span style="display:block;font:700 10px 'Space Grotesk';color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">
+              NGO
+            </span>
+            <span style="display:block;font-size:12px;color:var(--white);font-weight:600">Mumbai Food Relief</span>
+            <span style="display:block;font-size:11px;color:var(--muted2);margin-top:2px">mumbai.relief@demo.fr</span>
+          </button>
+        </div>
+        <p style="font-size:11px;color:var(--muted2);text-align:center;margin-top:8px">
+          Password for both: <strong style="color:var(--muted)">demo1234</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

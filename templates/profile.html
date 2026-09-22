@@ -1,1 +1,47 @@
-{% extends "base.html" %}{% block title %}Profile — FoodRescue{% endblock %}{% block content %}<div class="form-page"><div class="form-card-dark profile-dark reveal-up"><div class="section-kicker">ACCOUNT</div><h1>Your FoodRescue<br><span class="gradient-text">profile.</span></h1><div class="profile-row-dark"><span>Name</span><strong>{{me['name']}}</strong></div><div class="profile-row-dark"><span>Email</span><strong>{{me['email']}}</strong></div><div class="profile-row-dark"><span>Phone</span><strong>{{me['phone']}}</strong></div><div class="profile-row-dark"><span>Account type</span><strong>{{'Restaurant / Food Business' if me['role']=='business' else 'NGO / Organization'}}</strong></div><div class="profile-row-dark"><span>Organization</span><strong>{{me['organization_name']}}</strong></div><div class="profile-row-dark"><span>Exact address</span><strong>{{me['address']}}</strong></div></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Profile — FoodRescue{% endblock %}
+{% block content %}
+<div class="profile-page">
+  <div class="kicker reveal-up" style="margin-bottom:16px">YOUR ACCOUNT</div>
+  <div class="profile-card reveal-up">
+    <div class="profile-banner"></div>
+    <div class="profile-av">{{ me['name'][0]|upper }}</div>
+    <div class="profile-body">
+      <div class="profile-name">{{ me['name'] }}</div>
+      <div class="profile-org">
+        {{ me['organization_name'] }}
+        <span style="color:var(--line2);margin:0 6px">·</span>
+        {{ 'Restaurant / Food Business' if me['role']=='business' else 'NGO / Organisation' }}
+      </div>
+      <div class="profile-rows">
+        <div class="profile-row"><span>Name</span><strong>{{ me['name'] }}</strong></div>
+        <div class="profile-row"><span>Email</span><strong>{{ me['email'] }}</strong></div>
+        <div class="profile-row"><span>Phone</span><strong>{{ me['phone'] }}</strong></div>
+        <div class="profile-row"><span>Account type</span><strong>{{ 'Restaurant / Food Business' if me['role']=='business' else 'NGO / Organisation' }}</strong></div>
+        <div class="profile-row"><span>Organisation</span><strong>{{ me['organization_name'] }}</strong></div>
+        <div class="profile-row"><span>Address</span><strong>{{ me['address'] }}</strong></div>
+        <div class="profile-row"><span>Member since</span><strong>{{ me['created_at'][:10] }}</strong></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
+        {% if me['role'] == 'business' %}
+        <a class="btn primary" href="{{ url_for('add_surplus') }}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add surplus
+        </a>
+        <a class="btn ghost" href="{{ url_for('reservations') }}">Reservations</a>
+        {% else %}
+        <a class="btn primary" href="{{ url_for('discover') }}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Discover food
+        </a>
+        <a class="btn ghost" href="{{ url_for('reservations') }}">My reservations</a>
+        {% endif %}
+        <a class="btn danger" href="{{ url_for('logout') }}" style="margin-left:auto">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Log out
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

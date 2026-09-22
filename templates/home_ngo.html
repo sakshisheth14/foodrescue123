@@ -1,4 +1,134 @@
-{% extends "base.html" %}{% block title %}Discover Food — FoodRescue{% endblock %}{% block content %}
-<div class="app-shell"><section class="app-hero reveal-up"><div><div class="section-kicker">NGO / ORGANIZATION</div><h1>Good food is<br><span class="gradient-text">waiting.</span></h1><p>Hi {{me['name']}}. Discover live surplus, reserve what you need and navigate to the exact business address before pickup closes.</p></div><div class="app-actions"><a class="dark-btn primary" href="{{url_for('discover')}}">⌕ Discover surplus</a><a class="dark-btn" href="{{url_for('reservations')}}">My reservations ↗</a></div></section>
-<div class="app-stats"><div class="app-stat"><strong>{{listings|length}}</strong><span>Available near you</span></div><div class="app-stat"><strong>LIVE</strong><span>Pickup availability</span></div><div class="app-stat"><strong>↗</strong><span>Exact business directions</span></div></div>
-<section><div class="section-head-dark"><div><h2>Available surplus</h2><p>Live listings from food businesses</p></div><a class="card-link" href="{{url_for('discover')}}">View all →</a></div>{% if listings %}<div class="food-grid-dark">{% for x in listings %}<article class="food-card-dark reveal-up"><div class="card-head-dark"><span class="tag-dark">{{x['category']}}</span><span class="available-dark">{{x['available']}} available</span></div><h3>{{x['food_name']}}</h3><div class="business-line-dark">{{x['business_name']}}</div><div class="food-meta-dark"><span>⌖ {{x['address']}}</span><span>◷ Pickup by {{x['pickup_time'][11:16]}}</span></div><div class="deadline-dark {{x['deadline_class']}}">{{x['deadline_text']}}</div><div class="card-footer"><span class="price-dark">{{x['price_display']}}</span><a class="card-link" href="https://www.google.com/maps/dir/?api=1&destination={{x['address']|urlencode}}" target="_blank">Directions ↗</a></div><form class="card-footer" method="post" action="{{url_for('reserve',listing_id=x['id'])}}"><span style="color:#777f79;font-size:10px">Reserve quantity</span><input aria-label="Quantity" name="quantity" type="number" min="1" max="{{x['available']}}" value="1" style="width:70px;background:#0d0f0e;color:#fff;border:1px solid #333833;border-radius:9px;padding:8px"><button class="dark-btn primary" type="submit">Reserve</button></form></article>{% endfor %}</div>{% else %}<div class="empty-dark reveal-scale"><h3>No live surplus right now.</h3><p>Check again later or open Discover to search active listings. Expired food automatically disappears from the live feed.</p><a class="dark-btn primary" href="{{url_for('discover')}}">Open Discover</a></div>{% endif %}</section></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Home — FoodRescue{% endblock %}
+{% block content %}
+<div class="app-shell">
+
+  <section class="app-hero reveal-up">
+    <div class="app-hero-text">
+      <div class="kicker">NGO / ORGANISATION</div>
+      <h1>Good food is<br><span class="lime-text">waiting.</span></h1>
+      <p>Hi {{ me['name'] }}. Discover live surplus, reserve what your organisation needs, and navigate straight to the pickup address.</p>
+    </div>
+    <div class="app-actions">
+      <a class="btn primary" href="{{ url_for('discover') }}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Discover surplus
+      </a>
+      <a class="btn ghost" href="{{ url_for('reservations') }}">My reservations</a>
+    </div>
+  </section>
+
+  <div class="app-stats">
+    <div class="app-stat reveal-up">
+      <strong>{{ listings|length }}</strong>
+      <span>Available now</span>
+    </div>
+    <div class="app-stat reveal-up {{ 'good' if total_rescued > 0 }}">
+      <strong>{{ total_rescued }}</strong>
+      <span>Plates rescued</span>
+    </div>
+    <div class="app-stat reveal-up">
+      <strong>{{ my_reservations|length }}</strong>
+      <span>Active reservations</span>
+    </div>
+  </div>
+
+  {% if my_reservations %}
+  <section style="margin-bottom:40px">
+    <div class="section-head">
+      <div>
+        <h2>Your upcoming pickups</h2>
+        <p>Tap any card to see your pickup code</p>
+      </div>
+      <a href="{{ url_for('reservations') }}">View all →</a>
+    </div>
+    <div style="display:grid;gap:8px">
+      {% for r in my_reservations %}
+      <a href="{{ url_for('reservation_detail', reservation_id=r['id']) }}" style="text-decoration:none;color:inherit">
+        <div class="pickup-mini-card" style="cursor:pointer">
+          <div class="pmc-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lime)"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div class="pmc-body">
+            <h4>{{ r['food_name'] }}</h4>
+            <p>{{ r['business_name'] }} · {{ r['quantity'] }} plates · {{ r['pickup_time'][11:16] if r['pickup_time']|length >= 16 else r['pickup_time'] }}</p>
+          </div>
+          <span class="pmc-status {{ (r['pickup_status'] or 'Waiting')|replace(' ','-') }}">
+            {{ r['pickup_status'] or 'Waiting' }}
+          </span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>Available surplus</h2>
+        <p>Live listings from food businesses near you</p>
+      </div>
+      <a href="{{ url_for('discover') }}">View all →</a>
+    </div>
+
+    {% if listings %}
+    <div class="food-grid">
+      {% for x in listings %}
+      <article class="food-card reveal-up">
+        <div class="card-top">
+          <span class="tag">{{ x['category'] }}</span>
+          <span class="avail-badge">{{ x['available'] }} available</span>
+        </div>
+        <h3>{{ x['food_name'] }}</h3>
+        <p class="biz-name">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lime)"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          {{ x['business_name'] }}
+        </p>
+        <div class="food-meta">
+          <span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            {{ x['address'] }}
+          </span>
+          <span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Pickup by {{ x['pickup_time_display'] }}
+          </span>
+        </div>
+        <div class="deadline-badge {{ x['deadline_class'] }}">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          {{ x['deadline_text'] }}
+        </div>
+        <div class="card-foot">
+          <span class="price-tag {{ 'free' if x['is_free'] }}">{{ x['price_display'] }}</span>
+          <a class="card-dir-link" href="https://www.google.com/maps/search/?api=1&query={{ x['address']|urlencode }}" target="_blank" rel="noopener">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Directions
+          </a>
+        </div>
+        <form method="post" action="{{ url_for('reserve', listing_id=x['id']) }}">
+          <div class="qty-row">
+            <span class="qty-label">How many plates?</span>
+            <div class="qty-control">
+              <button type="button" class="qty-btn" data-dir="-">−</button>
+              <input class="qty-input" type="number" name="quantity" min="1" max="{{ x['available'] }}" value="1">
+              <button type="button" class="qty-btn" data-dir="+">+</button>
+            </div>
+          </div>
+          <button class="btn primary full" type="submit" style="margin-top:10px">Reserve</button>
+        </form>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state reveal-scale">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <h3>No live surplus right now.</h3>
+      <p>Check back later or search all listings in Discover.</p>
+      <a class="btn primary" href="{{ url_for('discover') }}">Open Discover</a>
+    </div>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

@@ -1,1 +1,135 @@
-{% extends "base.html" %}{% block title %}Add Surplus — FoodRescue{% endblock %}{% block content %}<div class="form-page"><div class="form-card-dark reveal-up"><div class="section-kicker">PUBLISH SURPLUS</div><h1>Put good food<br><span class="gradient-text">back in motion.</span></h1><p>Published as <strong>{{me['organization_name']}}</strong>. Your exact business address will be used for directions.</p>{% if error %}<div class="form-error-dark">{{error}}</div>{% endif %}<form method="post"><div class="form-grid-dark"><label>Food name<input name="food_name" required placeholder="e.g. Paneer wraps"></label><label>Category<select name="category" required><option value="">Select category</option><option>Restaurant</option><option>Bakery</option><option>Cafe</option><option>Hotel</option><option>Other</option></select></label><label>Quantity<input type="number" name="quantity" min="1" required placeholder="20"></label><label>Price<input type="number" step="0.01" name="price" value="0" min="0"></label><label>Pickup deadline<input type="datetime-local" name="pickup_time" required></label><label>Exact business address<input name="address" value="{{me['address']}}" required></label><label class="full-dark">Description<textarea name="description" rows="4" placeholder="What should the NGO know about this surplus?"></textarea></label><label class="check-dark full-dark"><input type="checkbox" name="is_free"> This surplus is free</label></div><div style="display:flex;justify-content:flex-end;gap:10px"><a class="dark-btn" href="{{url_for('home')}}">Cancel</a><button class="dark-btn primary" type="submit">Publish surplus ↗</button></div></form></div></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}{{ 'Edit Listing' if edit else 'Add Surplus' }} — FoodRescue{% endblock %}
+{% block content %}
+<div class="form-page">
+  <div class="form-card reveal-up">
+
+    <div class="kicker">{% if edit %}EDIT LISTING{% else %}PUBLISH SURPLUS{% endif %}</div>
+    <h1>{% if edit %}Update this<br><span class="lime-text">listing.</span>{% else %}Put good food<br><span class="lime-text">back in motion.</span>{% endif %}</h1>
+    <p>
+      Published as <strong>{{ me['organization_name'] }}</strong>.
+      {% if not edit %}Your exact business address will be used for NGO navigation.{% endif %}
+    </p>
+
+    {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
+
+    <form method="post">
+      <div class="form-grid">
+
+        <!-- food name -->
+        <div class="form-field">
+          <label class="form-label" for="food_name">Food name</label>
+          <input class="form-input" id="food_name" name="food_name" required
+            placeholder="e.g. Veg Thali Batch"
+            value="{{ listing.food_name if listing else request.form.get('food_name','') }}">
+        </div>
+
+        <!-- category -->
+        <div class="form-field">
+          <label class="form-label" for="category">Category</label>
+          <select class="form-select" id="category" name="category" required>
+            <option value="">Select category</option>
+            {% for cat in ['Restaurant','Bakery','Cafe','Grocery','Hotel','Other'] %}
+            <option value="{{ cat }}"
+              {{ 'selected' if (listing and listing.category==cat) or request.form.get('category')==cat }}>
+              {{ cat }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- food type -->
+        <div class="form-field">
+          <label class="form-label" for="food_type">Food condition</label>
+          <select class="form-select" id="food_type" name="food_type">
+            {% for ft in ['Cooked','Packaged','Raw','Bakery Fresh','Dairy','Other'] %}
+            <option value="{{ ft }}"
+              {{ 'selected' if (listing and listing.get('food_type','Cooked')==ft) or request.form.get('food_type')==ft }}>
+              {{ ft }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- quantity -->
+        <div class="form-field">
+          <label class="form-label" for="quantity">Quantity (plates / units)</label>
+          <input class="form-input" id="quantity" name="quantity" type="number" min="1" required
+            placeholder="e.g. 50"
+            value="{{ listing.quantity if listing else request.form.get('quantity','') }}">
+        </div>
+
+        <!-- pickup deadline -->
+        <div class="form-field">
+          <label class="form-label" for="pickup_time">Pickup deadline</label>
+          <input class="form-input" id="pickup_time" name="pickup_time" type="datetime-local" required
+            value="{{ listing.pickup_time if listing else request.form.get('pickup_time','') }}">
+        </div>
+
+        <!-- address -->
+        <div class="form-field">
+          <label class="form-label" for="address">Exact pickup address</label>
+          <input class="form-input" id="address" name="address" required
+            placeholder="Full address for directions"
+            value="{{ listing.address if listing else (request.form.get('address','') or me['address']) }}">
+        </div>
+
+        <!-- description -->
+        <div class="form-field full">
+          <label class="form-label" for="description">Description</label>
+          <textarea class="form-textarea" id="description" name="description" rows="3"
+            placeholder="What should the NGO know? Packaging, allergens, condition…">{{ listing.description if listing else request.form.get('description','') }}</textarea>
+        </div>
+
+        <!-- pricing model -->
+        <div class="form-field full">
+          <label class="form-label">Pricing model</label>
+          {% set cur_model = 'free' if (listing and listing.is_free) else ('paid' if listing else request.form.get('pricing_model','free')) %}
+          <div class="pricing-toggle">
+            <label class="pricing-option">
+              <input type="radio" name="pricing_model" value="free"
+                {{ 'checked' if cur_model == 'free' }}>
+              <strong>
+                <svg style="margin-right:5px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                Free donation
+              </strong>
+              <small>This surplus is a free donation to the NGO.</small>
+            </label>
+            <label class="pricing-option">
+              <input type="radio" name="pricing_model" value="paid"
+                {{ 'checked' if cur_model == 'paid' }}>
+              <strong>
+                <svg style="margin-right:5px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Low-cost
+              </strong>
+              <small>Set a total price for the entire listing.</small>
+            </label>
+          </div>
+
+          <!-- price field — shown only when paid is selected -->
+          <div class="price-reveal {{ 'visible' if cur_model == 'paid' }}" id="price-reveal">
+            <label class="form-label" for="price" style="margin-top:12px">Total price for entire listing (₹)</label>
+            <input class="form-input" id="price" name="price" type="number" min="0" step="0.01"
+              placeholder="e.g. 100"
+              value="{{ listing.price if listing and not listing.is_free else request.form.get('price','') }}">
+            <p class="form-helper highlight" style="margin-top:6px">
+              ⚠ This is the total price for the <em>entire listing</em>, not per plate.
+              If you list 50 plates at ₹100, that means ₹100 for all 50 plates combined.
+            </p>
+          </div>
+        </div>
+
+      </div><!-- /form-grid -->
+
+      <div class="form-actions">
+        <a class="btn ghost" href="{{ url_for('home') }}">Cancel</a>
+        <button class="btn primary" type="submit">
+          {{ 'Save changes' if edit else 'Publish surplus' }}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
