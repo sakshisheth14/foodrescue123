@@ -390,12 +390,7 @@ h1, h2, h3, h4 {
 .window-live { color: var(--lime); display: flex; align-items: center; gap: 5px; }
 .food-photo {
   height: 400px; border-radius: 16px; position: relative; overflow: hidden;
-  background:
-    radial-gradient(circle at 26% 24%, #F09840 0 9%, transparent 10%),
-    radial-gradient(circle at 65% 32%, #C8522A 0 13%, transparent 14%),
-    radial-gradient(circle at 48% 74%, #D4A84A 0 18%, transparent 19%),
-    radial-gradient(circle at 78% 60%, #7A3810 0 9%, transparent 10%),
-    linear-gradient(138deg, #5C2E16, #1E1B0E 52%, #121610);
+  background: var(--panel);
 }
 .food-photo::before {
   content: ''; position: absolute; inset: 0;
